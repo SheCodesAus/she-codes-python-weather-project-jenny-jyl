@@ -15,6 +15,9 @@ def format_temperature(temp):
     """
     return f"{temp}{DEGREE_SYBMOL}"
 
+# result = format_temperature("5")
+# print(result)
+
 
 def convert_date(iso_string):
     """Converts and ISO formatted date into a human readable format.
@@ -24,7 +27,34 @@ def convert_date(iso_string):
     Returns:
         A date formatted like: Weekday Date Month Year e.g. Tuesday 06 July 2021
     """
-    pass
+    # print(iso_string)
+    today_date = datetime.fromisoformat(iso_string)  # current date and time
+    # print(type(today_date))
+    # print(today_date)
+    date_str = today_date.isoformat()
+    weekday_list = ['Monday', 'Tuesday', 'Wednesday',
+                    'Thursday', 'Friday', 'Saturday', 'Sunday']
+    # print(weekday_list[date.weekday(today_date)])
+
+    day = today_date.strftime("%d")
+    # print(day)
+
+    month = int(today_date.strftime("%m"))
+    month_list = ['0', 'January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December']
+    # print(month_list[month])
+
+    year = today_date.strftime("%Y")
+    # print(year)
+
+    # print(
+    #     f"{weekday_list[date.weekday(today_date)]} {day} {month_list[month]} {year}")
+
+    return f"{weekday_list[date.weekday(today_date)]} {day} {month_list[month]} {year}"
+
+# TEST
+# result = convert_date("2021-07-05T07:00:00+08:00")
+# print(result)
 
 
 def convert_f_to_c(temp_in_farenheit):
@@ -35,7 +65,10 @@ def convert_f_to_c(temp_in_farenheit):
     Returns:
         A float representing a temperature in degrees celcius, rounded to 1dp.
     """
-    pass
+    temp_in_farenheit = float(temp_in_farenheit)
+    temp_in_celcius = float((temp_in_farenheit-32)*5/9)
+    result = round(temp_in_celcius, 1)
+    return (result)
 
 
 def calculate_mean(weather_data):
@@ -46,7 +79,17 @@ def calculate_mean(weather_data):
     Returns:
         A float representing the mean value.
     """
-    pass
+    for i in range(0, len(weather_data)):
+        weather_data[i] = float(weather_data[i])
+    average = sum(weather_data)/len(weather_data)
+    return (average)
+
+# TEST
+# weather_data = ["51", "58", "59", "52", "52", "48", "47", "53"]
+# for i in range(0, len(weather_data)):
+#     weather_data[i] = float(weather_data[i])
+# average = sum(weather_data)/len(weather_data)
+# print(average)
 
 
 def load_data_from_csv(csv_file):
@@ -56,8 +99,23 @@ def load_data_from_csv(csv_file):
         csv_file: a string representing the file path to a csv file.
     Returns:
         A list of lists, where each sublist is a (non-empty) line in the csv file.
-    """
-    pass
+    # """
+    with open(csv_file) as csv_file:
+        reader = csv.reader(csv_file)
+        header = next(csv_file)
+        for line in reader:
+            line[1] = int(line[1])
+            line[2] = int(line[2])
+            return (list[line])
+
+
+# with open("tests/data/example_one.csv") as csv_file:
+#     reader = csv.reader(csv_file)
+#     header = next(csv_file)
+#     for line in reader:
+#         line[1] = int(line[1])
+#         line[2] = int(line[2])
+#         print(line)
 
 
 def find_min(weather_data):
@@ -68,7 +126,20 @@ def find_min(weather_data):
     Returns:
         The minium value and it's position in the list.
     """
-    pass
+    for i in range(0, len(weather_data)):
+        weather_data[i] = float(weather_data[i])
+    result = (min(weather_data))
+    result = float(result)
+    return f"({(round(result,1))}, {(weather_data.index(result))})"
+
+
+# TEST
+weather_data = [49.123, 57, 56, 55, 53]
+for i in range(0, len(weather_data)):
+    weather_data[i] = float(weather_data[i])
+result = (min(weather_data))
+result = float(result)
+print(f"({round(result,1)}, {weather_data.index(result)})")
 
 
 def find_max(weather_data):
@@ -79,10 +150,14 @@ def find_max(weather_data):
     Returns:
         The maximum value and it's position in the list.
     """
-    pass
+    for i in range(0, len(weather_data)):
+        weather_data[i] = float(weather_data[i])
+    result = (max(weather_data))
+    result = float(result)
+    return f"({round(result,1)}, {(weather_data.index(result))})"
 
 
-def generate_summary(weather_data):
+def generate_summary(weather_data):  # to do at the end
     """Outputs a summary for the given weather data.
 
     Args:
@@ -93,7 +168,7 @@ def generate_summary(weather_data):
     pass
 
 
-def generate_daily_summary(weather_data):
+def generate_daily_summary(weather_data):  # the second last one to do
     """Outputs a daily summary for the given weather data.
 
     Args:
