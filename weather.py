@@ -50,7 +50,8 @@ def convert_date(iso_string):
     # print(
     #     f"{weekday_list[date.weekday(today_date)]} {day} {month_list[month]} {year}")
 
-    return f"{weekday_list[date.weekday(today_date)]} {day} {month_list[month]} {year}"
+    return f"{weekday_list[datetime.weekday(today_date)]} {day} {month_list[month]} {year}"
+
 
 # TEST
 # result = convert_date("2021-07-05T07:00:00+08:00")
@@ -126,20 +127,34 @@ def find_min(weather_data):
     Returns:
         The minium value and it's position in the list.
     """
-    for i in range(0, len(weather_data)):
-        weather_data[i] = float(weather_data[i])
-    result = (min(weather_data))
-    result = float(result)
-    return f"({(round(result,1))}, {(weather_data.index(result))})"
+    if len(weather_data) == 0:
+        return ("()")
+    else:
+        for i in range(len(weather_data)):
+            weather_data[i] = float(weather_data[i])
+        low_temp = (min(weather_data))
+        index = weather_data.index(low_temp)
+        if weather_data.count(low_temp) == 2:
+            result = (round(low_temp, 1), len(weather_data) - index - 1)
+        else:
+            result = (round(low_temp, 1), weather_data.index(low_temp))
+        return (result)
 
 
 # TEST
-weather_data = [49.123, 57, 56, 55, 53]
-for i in range(0, len(weather_data)):
-    weather_data[i] = float(weather_data[i])
-result = (min(weather_data))
-result = float(result)
-print(f"({round(result,1)}, {weather_data.index(result)})")
+# weather_data = []
+# if len(weather_data) == 0:
+#     print("()")
+# else:
+#     for i in range(len(weather_data)):
+#         weather_data[i] = float(weather_data[i])
+#     low_temp = (min(weather_data))
+#     index = weather_data.index(low_temp)
+#     if weather_data.count(low_temp) == 2:
+#         result = (round(low_temp, 1), len(weather_data) - index - 1)
+#     else:
+#         result = (round(low_temp, 1), weather_data.index(low_temp))
+#     print(result)
 
 
 def find_max(weather_data):
@@ -150,11 +165,33 @@ def find_max(weather_data):
     Returns:
         The maximum value and it's position in the list.
     """
-    for i in range(0, len(weather_data)):
-        weather_data[i] = float(weather_data[i])
-    result = (max(weather_data))
-    result = float(result)
-    return f"({round(result,1)}, {(weather_data.index(result))})"
+    if len(weather_data) == 0:
+        return ("()")
+    else:
+        for i in range(len(weather_data)):
+            weather_data[i] = float(weather_data[i])
+        high_temp = (max(weather_data))
+        index = weather_data.index(high_temp)
+        if weather_data.count(high_temp) == 2:
+            result = (round(high_temp, 1), len(weather_data) - index - 2)
+        else:
+            result = (round(high_temp, 1), weather_data.index(high_temp))
+        return (result)
+
+# test
+# weather_data = [49, 57, 56, 55, 57, 53, 49]
+# if len(weather_data) == 0:
+#     print("()")
+# else:
+#     for i in range(len(weather_data)):
+#         weather_data[i] = float(weather_data[i])
+#     high_temp = (max(weather_data))
+#     index = weather_data.index(high_temp)
+#     if weather_data.count(high_temp) == 2:
+#         result = (round(high_temp, 1), len(weather_data) - index - 2)
+#     else:
+#         result = (round(high_temp, 1), weather_data.index(high_temp))
+#     print(result)
 
 
 def generate_summary(weather_data):  # to do at the end
@@ -176,4 +213,17 @@ def generate_daily_summary(weather_data):  # the second last one to do
     Returns:
         A string containing the summary information.
     """
-    pass
+    date = weather_data[0]
+    for line in weather_data:
+        return (f"---- {convert_date(date)} ----")
+        return (f"Minimum Temperature: {format_temperature(find_min)}")
+        return (f"Maximum Temperature: {format_temperature(find_max)}")
+
+
+# ---- Friday 02 July 2021 - ---
+# Minimum Temperature: 9.4°C
+# Maximum Temperature: 19.4°C
+
+# ---- Saturday 03 July 2021 - ---
+# Minimum Temperature: 13.9°C
+# Maximum Temperature: 20.0°C
