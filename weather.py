@@ -27,35 +27,10 @@ def convert_date(iso_string):
     Returns:
         A date formatted like: Weekday Date Month Year e.g. Tuesday 06 July 2021
     """
-    # print(iso_string)
-    today_date = datetime.fromisoformat(iso_string)  # current date and time
-    # print(type(today_date))
-    # print(today_date)
-    date_str = today_date.isoformat()
-    weekday_list = ['Monday', 'Tuesday', 'Wednesday',
-                    'Thursday', 'Friday', 'Saturday', 'Sunday']
-    # print(weekday_list[date.weekday(today_date)])
-
-    day = today_date.strftime("%d")
-    # print(day)
-
-    month = int(today_date.strftime("%m"))
-    month_list = ['0', 'January', 'February', 'March', 'April', 'May', 'June',
-                  'July', 'August', 'September', 'October', 'November', 'December']
-    # print(month_list[month])
-
-    year = today_date.strftime("%Y")
-    # print(year)
-
-    # print(
-    #     f"{weekday_list[date.weekday(today_date)]} {day} {month_list[month]} {year}")
-
-    return f"{weekday_list[datetime.weekday(today_date)]} {day} {month_list[month]} {year}"
-
-
-# TEST
-# result = convert_date("2021-07-05T07:00:00+08:00")
-# print(result)
+    date = datetime(int(iso_string[0:4]),
+                    int(iso_string[5:7]),
+                    int(iso_string[8:10]))
+    return date.strftime(f"%A %d %B %Y")
 
 
 def convert_f_to_c(temp_in_farenheit):
@@ -101,22 +76,23 @@ def load_data_from_csv(csv_file):
     Returns:
         A list of lists, where each sublist is a (non-empty) line in the csv file.
     # """
-    with open(csv_file) as csv_file:
-        reader = csv.reader(csv_file)
-        header = next(csv_file)
+    with open(csv_file) as csv_file_data:
+        reader = csv.reader(csv_file_data)
+        header = next(reader)
+        return_list = []
         for line in reader:
-            line[1] = int(line[1])
-            line[2] = int(line[2])
-            return (list[line])
+            if line == []:
+                continue
+            else:
+                new_line = []
+                new_line.append(line[0])
+                new_line.append(int(line[1]))
+                new_line.append(int(line[2]))
+                return_list.append(new_line)
+    return return_list
 
-
-# with open("tests/data/example_one.csv") as csv_file:
-#     reader = csv.reader(csv_file)
-#     header = next(csv_file)
-#     for line in reader:
-#         line[1] = int(line[1])
-#         line[2] = int(line[2])
-#         print(line)
+# result = load_data_from_csv("tests/data/example_two.csv")
+# print(result)
 
 
 def find_min(weather_data):
@@ -128,7 +104,7 @@ def find_min(weather_data):
         The minium value and it's position in the list.
     """
     if len(weather_data) == 0:
-        return ("()")
+        return ()
     else:
         for i in range(len(weather_data)):
             weather_data[i] = float(weather_data[i])
@@ -140,8 +116,6 @@ def find_min(weather_data):
             result = (round(low_temp, 1), weather_data.index(low_temp))
         return (result)
 
-
-# TEST
 # weather_data = []
 # if len(weather_data) == 0:
 #     print("()")
@@ -166,7 +140,7 @@ def find_max(weather_data):
         The maximum value and it's position in the list.
     """
     if len(weather_data) == 0:
-        return ("()")
+        return ()
     else:
         for i in range(len(weather_data)):
             weather_data[i] = float(weather_data[i])
@@ -194,7 +168,7 @@ def find_max(weather_data):
 #     print(result)
 
 
-def generate_summary(weather_data):  # to do at the end
+def generate_summary(weather_data):
     """Outputs a summary for the given weather data.
 
     Args:
@@ -202,10 +176,89 @@ def generate_summary(weather_data):  # to do at the end
     Returns:
         A string containing the summary information.
     """
-    pass
+    result = ""
+    no_days = len(weather_data)
+    result += str(no_days) + " Day Overview"
+    result += "\n"
+    low = []
+    high = []
+    for data in weather_data:
+        low.append(data[1])
+        high.append(data[2])
+    min_temp = format_temperature(convert_f_to_c(min(low)))
+    max_temp = format_temperature(convert_f_to_c(max(high)))
+    dates = []
+    for data in weather_data:
+        dates.append(data[0])
+    low_date = convert_date(dates[low.index(min(low))])
+    high_date = convert_date(dates[high.index(max(high))])
+    avg_low = sum(low)/len(low)
+    avg_low = format_temperature(convert_f_to_c(avg_low))
+    avg_high = sum(high)/len(high)
+    avg_high = format_temperature(convert_f_to_c(avg_high))
+    result += "  The lowest temperature will be " + \
+        min_temp + ", and will occur on " + low_date + "."
+    result += "\n"
+    result += "  The highest temperature will be " + \
+        max_temp + ", and will occur on " + high_date + "."
+    result += "\n"
+    result += "  The average low this week is " + avg_low + "."
+    result += "\n"
+    result += "  The average high this week is " + avg_high + "."
+    result += "\n"
+    return (result)
+
+# generate_summary([
+#     ["2021-07-02T07:00:00+08:00", 49, 67],
+#     ["2021-07-03T07:00:00+08:00", 57, 68],
+#     ["2021-07-04T07:00:00+08:00", 56, 62],
+#     ["2021-07-05T07:00:00+08:00", 55, 61],
+#     ["2021-07-06T07:00:00+08:00", 53, 62]
+# ])
+
+# 5 Day Overview
+# The lowest temperature will be 9.4°C, and will occur on Friday 02 July 2021.
+# The highest temperature will be 20.0°C, and will occur on Saturday 03 July 2021.
+# The average low this week is 12.2°C.
+# The average high this week is 17.8°C.
+
+# generate_summary([
+#     ["2020-06-19T07:00:00+08:00", 47, 46],
+#     ["2020-06-20T07:00:00+08:00", 51, 67],
+#     ["2020-06-21T07:00:00+08:00", 58, 72],
+#     ["2020-06-22T07:00:00+08:00", 59, 71],
+#     ["2020-06-23T07:00:00+08:00", 52, 71],
+#     ["2020-06-24T07:00:00+08:00", 52, 67],
+#     ["2020-06-25T07:00:00+08:00", 48, 66],
+#     ["2020-06-26T07:00:00+08:00", 53, 66]
+# ])
+
+# 8 Day Overview
+# The lowest temperature will be 8.3°C, and will occur on Friday 19 June 2020.
+# The highest temperature will be 22.2°C, and will occur on Sunday 21 June 2020.
+# The average low this week is 11.4°C.
+# The average high this week is 18.8°C.
 
 
-def generate_daily_summary(weather_data):  # the second last one to do
+generate_summary([
+    ["2020-06-19T07:00:00+08:00", -47, -46],
+    ["2020-06-20T07:00:00+08:00", -51, 67],
+    ["2020-06-21T07:00:00+08:00", 58, 72],
+    ["2020-06-22T07:00:00+08:00", 59, 71],
+    ["2020-06-23T07:00:00+08:00", -52, 71],
+    ["2020-06-24T07:00:00+08:00", 52, 67],
+    ["2020-06-25T07:00:00+08:00", -48, 66],
+    ["2020-06-26T07:00:00+08:00", 53, 66]
+])
+
+# 8 Day Overview
+#   The lowest temperature will be -46.7°C, and will occur on Tuesday 23 June 2020.
+#   The highest temperature will be 22.2°C, and will occur on Sunday 21 June 2020.
+#   The average low this week is -16.1°C.
+#   The average high this week is 12.4°C.
+
+
+def generate_daily_summary(weather_data):
     """Outputs a daily summary for the given weather data.
 
     Args:
@@ -213,17 +266,21 @@ def generate_daily_summary(weather_data):  # the second last one to do
     Returns:
         A string containing the summary information.
     """
-    date = weather_data[0]
+    result = ""
     for line in weather_data:
-        return (f"---- {convert_date(date)} ----")
-        return (f"Minimum Temperature: {format_temperature(find_min)}")
-        return (f"Maximum Temperature: {format_temperature(find_max)}")
-
-
-# ---- Friday 02 July 2021 - ---
-# Minimum Temperature: 9.4°C
-# Maximum Temperature: 19.4°C
-
-# ---- Saturday 03 July 2021 - ---
-# Minimum Temperature: 13.9°C
-# Maximum Temperature: 20.0°C
+        # print(line)
+        day = line[0]
+        day = convert_date(day)
+        day = "---- "+day+" ----"
+        result += day
+        result += "\n"
+        min = line[1]
+        min = format_temperature(convert_f_to_c((min)))
+        result += "  Minimum Temperature:" + " "+min
+        result += "\n"
+        max = line[2]
+        max = format_temperature(convert_f_to_c((max)))
+        result += "  Maximum Temperature:" + " " + max
+        result += "\n"
+        result += "\n"
+    return result
