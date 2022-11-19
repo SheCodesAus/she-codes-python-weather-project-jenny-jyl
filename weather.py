@@ -208,55 +208,6 @@ def generate_summary(weather_data):
     result += "\n"
     return (result)
 
-# generate_summary([
-#     ["2021-07-02T07:00:00+08:00", 49, 67],
-#     ["2021-07-03T07:00:00+08:00", 57, 68],
-#     ["2021-07-04T07:00:00+08:00", 56, 62],
-#     ["2021-07-05T07:00:00+08:00", 55, 61],
-#     ["2021-07-06T07:00:00+08:00", 53, 62]
-# ])
-
-# 5 Day Overview
-# The lowest temperature will be 9.4°C, and will occur on Friday 02 July 2021.
-# The highest temperature will be 20.0°C, and will occur on Saturday 03 July 2021.
-# The average low this week is 12.2°C.
-# The average high this week is 17.8°C.
-
-# generate_summary([
-#     ["2020-06-19T07:00:00+08:00", 47, 46],
-#     ["2020-06-20T07:00:00+08:00", 51, 67],
-#     ["2020-06-21T07:00:00+08:00", 58, 72],
-#     ["2020-06-22T07:00:00+08:00", 59, 71],
-#     ["2020-06-23T07:00:00+08:00", 52, 71],
-#     ["2020-06-24T07:00:00+08:00", 52, 67],
-#     ["2020-06-25T07:00:00+08:00", 48, 66],
-#     ["2020-06-26T07:00:00+08:00", 53, 66]
-# ])
-
-# 8 Day Overview
-# The lowest temperature will be 8.3°C, and will occur on Friday 19 June 2020.
-# The highest temperature will be 22.2°C, and will occur on Sunday 21 June 2020.
-# The average low this week is 11.4°C.
-# The average high this week is 18.8°C.
-
-
-generate_summary([
-    ["2020-06-19T07:00:00+08:00", -47, -46],
-    ["2020-06-20T07:00:00+08:00", -51, 67],
-    ["2020-06-21T07:00:00+08:00", 58, 72],
-    ["2020-06-22T07:00:00+08:00", 59, 71],
-    ["2020-06-23T07:00:00+08:00", -52, 71],
-    ["2020-06-24T07:00:00+08:00", 52, 67],
-    ["2020-06-25T07:00:00+08:00", -48, 66],
-    ["2020-06-26T07:00:00+08:00", 53, 66]
-])
-
-# 8 Day Overview
-#   The lowest temperature will be -46.7°C, and will occur on Tuesday 23 June 2020.
-#   The highest temperature will be 22.2°C, and will occur on Sunday 21 June 2020.
-#   The average low this week is -16.1°C.
-#   The average high this week is 12.4°C.
-
 
 def generate_daily_summary(weather_data):
     """Outputs a daily summary for the given weather data.
